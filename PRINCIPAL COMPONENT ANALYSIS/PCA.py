@@ -12,6 +12,9 @@ import numpy as np
 
 class PCA:
     def __init__(self, k = None):
+        '''
+        :param: k: Number of principal components to select
+        '''
         if not k:
             k = 2
             self.k = k
