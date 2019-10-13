@@ -41,7 +41,7 @@ class PCA:
         #sort eigen values and return explained variance
         self.explained_variance = self.explained_variance_()
         #return eigen value and corresponding eigenvectors
-        self.eival, self.eivect = self.eival[:self.k], self.eivect[:, self.sorted_eigen][:, :self.k]
+        self.eival, self.eivect = self.eival[:self.k], self.eivect[:, self.sorted_eigen]
         return self
     
     def fit_transform(self):
