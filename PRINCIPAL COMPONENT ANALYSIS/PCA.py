@@ -14,6 +14,7 @@ class PCA:
     def __init__(self, k = None):
         '''
         :param: k: Number of principal components to select
+                    Default value is 2.
         '''
         if not k:
             k = 2
@@ -24,7 +25,7 @@ class PCA:
     
     def explained_variance_(self):
         '''
-        :Return: esplained variance.
+        :Return: explained variance.
         '''
         self.total_eigenvalue = np.sum(self.eival)
         self.explained_variance = [x/self.total_eigenvalue*100 for x in sorted(self.eival, reverse = True)[:self.k]]
