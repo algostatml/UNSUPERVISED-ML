@@ -23,37 +23,39 @@ class PCA:
         '''
         :Return: esplained variance.
         '''
-        self.total_variance = self.cov.diagonal()
-        self.explained_variance = 
-        return 
+        self.total_eigenvalue = np.sum(self.eival)
+        self.explained_variance = [x/self.total_eigenvalue*100 for x in sorted(self.eival, reverse = True)[:self.k]]
+        return self.explained_variance
     
     def fit(self, X):
+        '''
+        :param: X: NxD
+        '''
         self.X = X
+        #centered mean
         self.X = self.X - np.mean(self.X, axis = 0)
+        #covariance
         self.cov = (1/self.X.shape[1])* np.dot(self.X.T, self.X)
         self.eival, self.eivect = np.linalg.eig(self.cov)
-        #sort eigen values
-        self.explained_variance = sorted(self.eival[:self.k], reverse = True)
+        #sort eigen values and return explained variance
+        self.explained_variance = self.explained_variance_()
+        #return eigen value and corresponding eigenvectors
         self.eival, self.eivect = self.eival[:self.k], self.eivect[:, :self.k]
         return self
     
     def fit_transform(self):
+        '''
+        :Return: transformed datapoints
+        '''
         return self.X.dot(self.eivect[:, :self.k])
 
 #%% Testing
 from sklearn.datasets import load_iris
 X, y = load_iris().data, load_iris().target
 A = np.array([[1, 2], [3, 4], [5, 6]])
-pca = PCA(k = 2).fit(X)
+pca = PCA(k = 2).fit(A)
 newX = pca.fit_transform()
 
-per_var = np.round(pca.explained_variance * 100, decimals=1)
-labels = ['PC' + str(x) for x in range(1, len(per_var) + 1)]
-plt.bar(x=range(1, len(per_var)+1), height=per_var, tick_label=labels)
-plt.ylabel('percentange of explained variance')
-plt.xlabel('principal component')
-plt.title('scree plot')
-plt.show()
 
 
 
