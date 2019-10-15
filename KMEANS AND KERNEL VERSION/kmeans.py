@@ -79,10 +79,10 @@ import matplotlib.pyplot as plt
 X = np.array([[1, 2], [1, 4], [1, 0],
               [10, 2], [10, 4], [10, 0]])
 new_x = np.array([[1, 5], [10, 6], [10, 3]])
-kmns = kMeans().fit(X)
+kmns = kMeans(k=2).fit(X)
 pred = kmns.predict(new_x)
 plt.scatter(X[:, 0], X[:, 1], c = kmns.cluster)
-
+plt.scatter(kmns.nu[:, 0], kmns.nu[:, 1], marker = '.')
 #%% Kmeans from Sklearn
 
 from sklearn.cluster import KMeans
