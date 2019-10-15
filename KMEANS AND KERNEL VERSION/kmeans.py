@@ -73,7 +73,8 @@ class kMeans:
     
     
 #%% Testing
-
+from sklearn.datasets import make_blobs, make_moons, make_circles
+X, y = make_circles(1000, noise = .07, factor = .5)
 import matplotlib.pyplot as plt
 X = np.array([[1, 2], [1, 4], [1, 0],
               [10, 2], [10, 4], [10, 0]])
