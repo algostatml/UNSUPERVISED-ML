@@ -32,10 +32,15 @@ class kMeans:
        
         return np.linalg.norm(x - nu, axis = axs)
     
-    def fit(self, X):
+    def fit(self, X, iteration = None):
         '''
         :param: X: NxD
         '''
+        if not iteration:
+            iteration = 100
+            self.iteration = iteration
+        else:
+            self.iteration
         self.X = X
         #random sample
         N, D = X.shape
@@ -47,15 +52,20 @@ class kMeans:
         of new center is same as old center, then we reached an
         optimum point.
         '''
-        while np.linalg.norm(self.nu - self.prev_c) != 0:
-            for ii in range(X.shape[0]):
-                self.distance_matrix = kMeans.distance(self.X[ii], self.nu)
-                self.cluster[ii] = np.argmin(self.distance_matrix)
-            self.prev_c = copy.deepcopy(self.nu)
-            for ij in range(self.k):
-                #mean of the new found clusters
-                self.newPoints = [X[ii] for ii in range(X.shape[0]) if self.cluster[ii] == ij]
-                self.nu[ij] = np.mean(self.newPoints, axis = 0)
+        self.cost_rec = np.zeros(self.iteration)
+        for self.iter in range(self.iteration):
+            self.cost_rec[self.iter] = np.linalg.norm(self.nu - self.prev_c, ord = 1)
+            if self.cost_rec[self.iter] != 0:
+                for ik in range(X.shape[0]):
+                    self.distance_matrix = kMeans.distance(self.X[ik], self.nu)
+                    self.cluster[ik] = np.argmin(self.distance_matrix)
+                self.prev_c = copy.deepcopy(self.nu)
+                for ij in range(self.k):
+                    #mean of the new found clusters
+                    self.newPoints = [X[ii] for ii in range(X.shape[0]) if self.cluster[ii] == ij]
+                    self.nu[ij] = np.mean(self.newPoints, axis = 0)
+            else:
+                pass
         return self
                 
    
@@ -94,10 +104,15 @@ class kMeans_l1:
        
         return np.linalg.norm(x - nu, ord = 1, axis = axs)
     
-    def fit(self, X):
+    def fit(self, X, iteration = None):
         '''
         :param: X: NxD
         '''
+        if not iteration:
+            iteration = 100
+            self.iteration = iteration
+        else:
+            self.iteration = iteration
         self.X = X
         #random sample
         N, D = X.shape
@@ -109,15 +124,20 @@ class kMeans_l1:
         of new center is same as old center, then we reached an
         optimum point.
         '''
-        while np.linalg.norm(self.nu - self.prev_c, ord = 1) != 0:
-            for ii in range(X.shape[0]):
-                self.distance_matrix = kMeans.distance(self.X[ii], self.nu)
-                self.cluster[ii] = np.argmin(self.distance_matrix)
-            self.prev_c = copy.deepcopy(self.nu)
-            for ij in range(self.k):
-                #mean of the new found clusters
-                self.newPoints = [X[ii] for ii in range(X.shape[0]) if self.cluster[ii] == ij]
-                self.nu[ij] = np.mean(self.newPoints, axis = 0)
+        self.cost_rec = np.zeros(self.iteration)
+        for self.iter in range(self.iteration):
+            self.cost_rec[self.iter] = np.linalg.norm(self.nu - self.prev_c, ord = 1)
+            if self.cost_rec[self.iter] != 0:
+                for ik in range(X.shape[0]):
+                    self.distance_matrix = kMeans.distance(self.X[ik], self.nu)
+                    self.cluster[ik] = np.argmin(self.distance_matrix)
+                self.prev_c = copy.deepcopy(self.nu)
+                for ij in range(self.k):
+                    #mean of the new found clusters
+                    self.newPoints = [X[ii] for ii in range(X.shape[0]) if self.cluster[ii] == ij]
+                    self.nu[ij] = np.mean(self.newPoints, axis = 0)
+            else:
+                pass
         return self
                 
    
@@ -132,6 +152,8 @@ class kMeans_l1:
             distance_matrix = kMeans.distance(X[ii], self.nu)
             pred[ii] = np.argmin(distance_matrix)
         return pred
+    
+    
 #%% Testing
 from sklearn.datasets import make_blobs, make_moons, make_circles
 X, y = make_circles(1000, noise = .07, factor = .5)
@@ -143,6 +165,9 @@ kmns = kMeans(k=2).fit(X)
 pred = kmns.predict(new_x)
 plt.scatter(X[:, 0], X[:, 1], c = kmns.cluster)
 plt.scatter(kmns.nu[:, 0], kmns.nu[:, 1], marker = '.')
+
+#plot cost
+plt.scatter(kmns.iter, kmns.cost_rec)
 #%% Kmeans from Sklearn
 
 from sklearn.cluster import KMeans
