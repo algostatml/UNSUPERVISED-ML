@@ -167,7 +167,7 @@ plt.scatter(X[:, 0], X[:, 1], c = kmns.cluster)
 plt.scatter(kmns.nu[:, 0], kmns.nu[:, 1], marker = '.')
 
 #plot cost
-plt.scatter(kmns.iter, kmns.cost_rec)
+plt.plot(np.arange(kmns.iter), kmns.cost_rec[:kmns.iter])
 #%% Kmeans from Sklearn
 
 from sklearn.cluster import KMeans
