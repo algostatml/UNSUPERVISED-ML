@@ -54,7 +54,7 @@ class kMeans:
         '''
         self.cost_rec = np.zeros(self.iteration)
         for self.iter in range(self.iteration):
-            self.cost_rec[self.iter] = np.linalg.norm(self.nu - self.prev_c, ord = 1)
+            self.cost_rec[self.iter] = np.linalg.norm(self.nu - self.prev_c)
             if self.cost_rec[self.iter] != 0:
                 for ik in range(X.shape[0]):
                     self.distance_matrix = kMeans.distance(self.X[ik], self.nu)
