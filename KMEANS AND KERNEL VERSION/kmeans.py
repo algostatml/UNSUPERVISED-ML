@@ -65,7 +65,8 @@ class kMeans:
                     self.newPoints = [X[ii] for ii in range(X.shape[0]) if self.cluster[ii] == ij]
                     self.nu[ij] = np.mean(self.newPoints, axis = 0)
             else:
-                pass
+                self.cost_rec = self.cost_rec[:self.iter]
+                break
         return self
                 
    
@@ -167,7 +168,7 @@ plt.scatter(X[:, 0], X[:, 1], c = kmns.cluster)
 plt.scatter(kmns.nu[:, 0], kmns.nu[:, 1], marker = '.')
 
 #plot cost
-plt.plot(np.arange(kmns.iter), kmns.cost_rec[:kmns.iter])
+plt.plot(np.arange(kmns.iter), kmns.cost_rec)
 #%% Kmeans from Sklearn
 
 from sklearn.cluster import KMeans
