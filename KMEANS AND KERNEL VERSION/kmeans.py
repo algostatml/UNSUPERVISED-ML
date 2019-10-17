@@ -138,7 +138,8 @@ class kMeans_l1:
                     self.newPoints = [X[ii] for ii in range(X.shape[0]) if self.cluster[ii] == ij]
                     self.nu[ij] = np.mean(self.newPoints, axis = 0)
             else:
-                pass
+                self.cost_rec = self.cost_rec[:self.iter]
+                break
         return self
                 
    
