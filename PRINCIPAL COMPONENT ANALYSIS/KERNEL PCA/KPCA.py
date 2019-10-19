@@ -60,8 +60,8 @@ class kPCA(Kernels):
         self.normKernel = self.kernelize(X, X) - 2*1/X.shape[0]*np.ones((X.shape[0], X.shape[0])).dot(self.kernelize(X, X)) + \
                             1/X.shape[0]*np.ones((X.shape[0], X.shape[0])).dot(np.dot(1/X.shape[0]*np.ones((X.shape[0], X.shape[0])), self.kernelize(X, X)))
         self.eival, self.eivect = np.linalg.eig(self.normKernel)
-        self.sorted_eigen = np.argsort(self.eival[:self.k])[::-1]
         #sort eigen values and return explained variance
+        self.sorted_eigen = np.argsort(self.eival[:self.k])[::-1]
         self.explained_variance = self.explained_variance_()
         #return eigen value and corresponding eigenvectors
         self.eival, self.eivect = self.eival[:self.k], self.eivect[:, self.sorted_eigen]
@@ -75,8 +75,21 @@ class kPCA(Kernels):
         return self.kernelize(self.X, self.X).dot(self.eivect)
     
 #%% Testing
-        
-kpca = kPCA(kernel='linear').fit(X)
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.datasets import load_iris
+x = MinMaxScaler().fit_transform(train)
+X, y = load_iris().data, load_iris().target
+
+kpca = kPCA(kernel='polynomial').fit(x)
 kpca.explained_variance
 newX = kpca.fit_transform()
-plt.scatter(newX[:, 0], newX[:, 1], c = y)
+plt.scatter(newX[:, 0], newX[:, 1])
+
+
+#%%
+
+from sklearn.decomposition import KernelPCA
+kpca = KernelPCA(n_components=2, kernel='rbf')
+kpca.fit_transform(x)
+X_transformed = kpca.fit_transform(train)
+plt.scatter(X_transformed[:, 0], X_transformed[:, 1])
