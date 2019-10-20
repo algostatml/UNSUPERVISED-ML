@@ -59,16 +59,11 @@ class kkmeans(Kernels):
         :param: X: NxD
         '''
         if not iteration:
-            iteration = 200
+            iteration = 500
             self.iteration = iteration
         else:
             self.iteration = iteration
-#        self.X = self.kernelize(X, X)
-        #random sample
         N, D = X.shape
-        #randomly initialize k centroids
-        self.nu = X[np.random.choice(N, self.k, replace = False)]
-        self.prev_c = np.zeros((self.k, D))
         self.cluster = np.random.randint(low = 0, high = 2, size = N)
         '''iterate by checking to see if new centroid
         of new center is same as old center, then we reached an
@@ -76,8 +71,7 @@ class kkmeans(Kernels):
         '''
         self.cost_rec = np.zeros(self.iteration)
         for self.iter in range(self.iteration):
-#            self.cost_rec[self.iter] = np.linalg.norm(self.nu - self.prev_c)
-            self.kappar = np.tile(np.diag(self.kernelize(X, X)).reshape((-1, 1)), self.k)
+            self.kappar = np.tile(self.kernelize(X, X).diagonal().reshape((-1, 1)), self.k)
             self.z_i = np.bincount(self.cluster)
             for self.c in range(self.k):
                 self.kappar[:, self.c] = np.sum((self.kernelize(X, X))[self.cluster == self.c][:, self.cluster == self.c])/\
