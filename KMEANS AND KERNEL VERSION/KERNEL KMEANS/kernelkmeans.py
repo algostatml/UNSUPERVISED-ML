@@ -8,7 +8,6 @@ Created on Mon Oct 14 01:41:45 2019
 
 from __future__ import absolute_import
 import numpy as np
-import copy
 from Utils.kernels import Kernels
 
 class kkmeans(Kernels):
@@ -65,10 +64,6 @@ class kkmeans(Kernels):
             self.iteration = iteration
         N, D = X.shape
         self.cluster = np.random.randint(low = 0, high = 2, size = N)
-        '''iterate by checking to see if new centroid
-        of new center is same as old center, then we reached an
-        optimum point.
-        '''
         self.cost_rec = np.zeros(self.iteration)
         for self.iter in range(self.iteration):
             self.kappar = np.tile(self.kernelize(X, X).diagonal().reshape((-1, 1)), self.k)
