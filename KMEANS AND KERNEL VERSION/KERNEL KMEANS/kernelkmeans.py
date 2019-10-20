@@ -20,7 +20,7 @@ class kkmeans(Kernels):
         else:
             self.k = k
         if not kernel:
-            kernel = 'rbf'
+            kernel = 'linear'
             self.kernel = kernel
         else:
             self.kernel = kernel
@@ -59,7 +59,7 @@ class kkmeans(Kernels):
         :param: X: NxD
         '''
         if not iteration:
-            iteration = 500
+            iteration = 20
             self.iteration = iteration
         else:
             self.iteration = iteration
@@ -74,22 +74,17 @@ class kkmeans(Kernels):
             self.kappar = np.tile(self.kernelize(X, X).diagonal().reshape((-1, 1)), self.k)
             self.z_i = np.bincount(self.cluster)
             for self.c in range(self.k):
-                self.kappar[:, self.c] = np.sum((self.kernelize(X, X))[self.cluster == self.c][:, self.cluster == self.c])/\
+                self.kappar[:, self.c] = self.kappar[:, self.c] + np.sum((self.kernelize(X, X))[self.cluster == self.c][:, self.cluster == self.c])/\
                                             (self.z_i[self.c]**2) - 2*np.sum(self.kernelize(X, X)[:, self.cluster == self.c], axis = 1)/self.z_i[self.c]
-            self.cluster = np.argmin(self.kappar, axis = 1)
-        return self.cluster
+        return self
     
-    def predict(self, X):
+    def predict(self):
         '''
         :param: X: NxD
         :return type: labels
         '''
-        pred = np.zeros(X.shape[0])
-        #compare new data to final centroid
-        for ii in range(X.shape[0]):
-            distance_matrix = self.distance(X[ii], self.nu)
-            pred[ii] = np.argmin(distance_matrix)
-        return pred
+        
+        return np.argmin(self.kappar, axis = 1)
     
 
 #%% Testing
@@ -100,4 +95,4 @@ X = np.array([[1, 2], [1, 4], [1, 0],
               [10, 2], [10, 4], [10, 0]])
     
 kernelkmns = kkmeans().fit(X)
-plt.scatter(X[:, 0], X[:, 1], c = kernelkmns)
+plt.scatter(X[:, 0], X[:, 1], c = kernelkmns.predict())
