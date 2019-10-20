@@ -3,7 +3,7 @@ Unsupervised machine learning algorithm with code.
 
 
 ----------------------
-##### Principal Component Analysis | [code](https://github.com/algostatml/UNSUPERVISED-ML/blob/master/PRINCIPAL%20COMPONENT%20ANALYSIS/PCA.py)
+##### Principal Component Analysis | [Classical PCA](https://github.com/algostatml/UNSUPERVISED-ML/blob/master/PRINCIPAL%20COMPONENT%20ANALYSIS/PCA.py) | [Kernel PCA](https://github.com/algostatml/UNSUPERVISED-ML/blob/master/PRINCIPAL%20COMPONENT%20ANALYSIS/KERNEL%20PCA/KPCA.py)
 
 ##### Principal component analysis (PCA) is a powerful tool for data processing and dimensionality reduction. Its objective is to principally determine a subspace that explains most of the variance of the data, by projecting data into this subspace of k less than the original space N.
 
