@@ -50,6 +50,12 @@ class kPCA(Kernels):
             return Kernels.cosine(x1, x2)
         elif self.kernel == 'correlation':
             return Kernels.correlation(x1, x2)
+        elif self.kernel == 'linrbf':
+            return Kernels.linrbf(x1, x2)
+        elif self.kernel == 'rbfpoly':
+            return Kernels.rbfpoly(x1, x2)
+        elif self.kernel == 'rbfcosine':
+            return Kernels.rbfpoly(x1, x2)
         
     def fit(self, X):
         '''
@@ -65,6 +71,7 @@ class kPCA(Kernels):
         self.explained_variance = self.explained_variance_()
         #return eigen value and corresponding eigenvectors
         self.eival, self.eivect = self.eival[:self.k], self.eivect[:, self.sorted_eigen]
+        self.components_ = self.eivect.T
         return self
     
     
@@ -74,22 +81,12 @@ class kPCA(Kernels):
         '''
         return self.kernelize(self.X, self.X).dot(self.eivect)
     
-#%% Testing
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.datasets import load_iris
-x = MinMaxScaler().fit_transform(train)
-X, y = load_iris().data, load_iris().target
+    def inverse_transform(self):
+        '''
+        :Return the inverse of input data
+        '''
+        self.transformed = self.kernelize(self.X, self.X).dot(self.eivect)
+        return self.transformed.dot(self.components_) + self.normKernel
+    
+    
 
-kpca = kPCA(kernel='polynomial').fit(x)
-kpca.explained_variance
-newX = kpca.fit_transform()
-plt.scatter(newX[:, 0], newX[:, 1])
-
-
-#%%
-
-from sklearn.decomposition import KernelPCA
-kpca = KernelPCA(n_components=2, kernel='rbf')
-kpca.fit_transform(x)
-X_transformed = kpca.fit_transform(train)
-plt.scatter(X_transformed[:, 0], X_transformed[:, 1])
