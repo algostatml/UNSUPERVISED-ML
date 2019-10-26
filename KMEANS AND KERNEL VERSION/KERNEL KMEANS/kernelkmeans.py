@@ -14,7 +14,7 @@ class kkmeans(Kernels):
     def __init__(self, k = None,kernel = None):
         super().__init__()
         if not k:
-            k = 2
+            k = 3
             self.k = k
         else:
             self.k = k
@@ -83,11 +83,16 @@ class kkmeans(Kernels):
     
 
 #%% Testing
-from sklearn.datasets import make_circles
-X, y = make_circles(1000, noise = .07, factor = .5)
+from sklearn.datasets import make_circles, make_blobs
+X, y = make_blobs(1000, )
 import matplotlib.pyplot as plt  
-X = np.array([[1, 2], [1, 4], [1, 0],
-              [10, 2], [10, 4], [10, 0]])
-    
-kernelkmns = kkmeans().fit(X)
+
+trans = [[.6, -.6], [-.4, .8]]
+X = X.dot(trans)
+kernelkmns = kkmeans(kernel='polynomial').fit(X)
+
 plt.scatter(X[:, 0], X[:, 1], c = kernelkmns.predict())
+
+
+
+
