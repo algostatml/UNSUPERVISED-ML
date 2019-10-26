@@ -56,6 +56,10 @@ class kPCA(Kernels):
             return Kernels.rbfpoly(x1, x2)
         elif self.kernel == 'rbfcosine':
             return Kernels.rbfpoly(x1, x2)
+        elif self.kernel == 'etakernel':
+            return Kernels.etakernel(x1, x2)
+        elif self.kernel == 'alignment':
+            return Kernels.alignment(x1, x2)
         
     def fit(self, X):
         '''
