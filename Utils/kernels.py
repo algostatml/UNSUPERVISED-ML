@@ -56,7 +56,56 @@ class Kernels:
             return np.exp(-gamma * np.linalg.norm(x1 - x2, axis = 1)**2)
         elif x1.ndim > 1 and x2.ndim > 1:
             return np.exp(-gamma * np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)**2)
+       
+    @staticmethod
+    def laplacian(x1, x2, gamma = None):
+        '''
+        RBF: Radial basis function or guassian kernel
+        ----------------------------------------------
+        :param: x1: NxD transposed feature space
+        :param: x2: NxD feature space
+        :param: gamma: 1/2(sigma-square)
+        :return type: kernel(Gram) matrix
+        '''
+        if not gamma:
+            gamma = 1/x1.shape[1]
+        else:
+            gamma = gamma
+        if x1.ndim == 1 and x2.ndim == 1:
+            return np.exp(-gamma * np.linalg.norm(x1 - x2))
+        elif (x1.ndim > 1 and x2.ndim == 1) or (x1.ndim == 1 and x2.ndim > 1):
+            return np.exp(-gamma * np.linalg.norm(x1 - x2, axis = 1))
+        elif x1.ndim > 1 and x2.ndim > 1:
+            return np.exp(-gamma * np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2))
         
+    
+    @staticmethod
+    def locguass(x1, x2, d = None, gamma = None):
+        '''
+        '''
+        if not gamma:
+            gamma = 1/x1.shape[1]
+        else:
+            gamma = gamma
+        if not d:
+            d = 3
+        else:
+            d = d
+        if x1.ndim == 1 and x2.ndim == 1:
+            return (np.max(0, 1 - gamma*np.linalg.norm(x1 - x2)/3)**d)*np.exp(-gamma * np.linalg.norm(x1 - x2)**2)
+        elif (x1.ndim > 1 and x2.ndim == 1) or (x1.ndim == 1 and x2.ndim > 1):
+            return (np.max(0, 1 - gamma*np.linalg.norm(x1 - x2, axis = 1)/3)**d)*np.exp(-gamma * np.linalg.norm(x1 - x2, axis = 1)**2)
+        elif x1.ndim > 1 and x2.ndim > 1:
+            return (np.max(0, 1 - gamma*np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)/3)**d) * np.exp(-gamma * np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)**2)
+    
+    @staticmethod
+    def chi(x):
+        '''
+        Using Chisquared from sklearn
+        '''
+        from sklearn.metrics.pairwise import chi2_kernel
+        return chi2_kernel(x)
+    
     @staticmethod
     def sigmoid(x1, x2, gamma = None, c = None):
         '''
@@ -74,6 +123,7 @@ class Kernels:
         if not c:
             c = 1
         return np.tanh(gamma * x1.dot(x2.T) + c)
+    
     
     @staticmethod
     def polynomial(x1, x2, d = None):
@@ -117,7 +167,7 @@ class Kernels:
             gamma = 1/x1.shape[1]
         else:
             gamma = gamma
-        return np.exp((x1.dot(x2.T)/np.linalg.norm(x1, 1) * np.linalg.norm(x2, 1)) - gamma)
+        return np.exp((x1.dot(x2.T)/np.linalg.norm(x1, 1) * np.linalg.norm(x2, 1)) - 1/gamma)
     
     @staticmethod
     def linrbf(x1, x2, gamma = None, op = None):
