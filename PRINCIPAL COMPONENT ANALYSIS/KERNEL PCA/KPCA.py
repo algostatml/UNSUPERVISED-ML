@@ -60,6 +60,12 @@ class kPCA(Kernels):
             return Kernels.etakernel(x1, x2)
         elif self.kernel == 'alignment':
             return Kernels.alignment(x1, x2)
+        elif self.kernel == 'laplace':
+            return Kernels.laplacian(x1, x2)
+        elif self.kernel == 'locguass':
+            return Kernels.locguass(x1, x2)
+        elif self.kernel == 'chi':
+            return Kernels.chi(x1)
         
     def fit(self, X):
         '''
@@ -67,8 +73,10 @@ class kPCA(Kernels):
         '''
         self.X = X
         #normalized kernel
-        self.normKernel = self.kernelize(X, X) - 2*1/X.shape[0]*np.ones((X.shape[0], X.shape[0])).dot(self.kernelize(X, X)) + \
-                            1/X.shape[0]*np.ones((X.shape[0], X.shape[0])).dot(np.dot(1/X.shape[0]*np.ones((X.shape[0], X.shape[0])), self.kernelize(X, X)))
+        N_N = 1/self.X.shape[0]*np.ones((self.X.shape[0],self.X.shape[0]))
+        self.normKernel = self.kernelize(X, X) - N_N.dot(self.kernelize(X, X)) - self.kernelize(X, X).dot(N_N) + N_N.dot(self.kernelize(X, X).dot(N_N))
+#        self.normKernel = self.kernelize(X, X) - 2*1/X.shape[0]*np.ones((X.shape[0], X.shape[0])).dot(self.kernelize(X, X)) + \
+#                            1/X.shape[0]*np.ones((X.shape[0], X.shape[0])).dot(np.dot(1/X.shape[0]*np.ones((X.shape[0], X.shape[0])), self.kernelize(X, X)))
         self.eival, self.eivect = np.linalg.eig(self.normKernel)
         #sort eigen values and return explained variance
         self.sorted_eigen = np.argsort(self.eival[:self.k])[::-1]
@@ -83,14 +91,14 @@ class kPCA(Kernels):
         '''
         Return: transformed data
         '''
-        return self.kernelize(self.X, self.X).dot(self.eivect)
+        return self.normKernel.dot(self.eivect)
     
     def inverse_transform(self):
         '''
         :Return the inverse of input data
         '''
-        self.transformed = self.kernelize(self.X, self.X).dot(self.eivect)
-        return self.transformed.dot(self.components_) + self.normKernel
+        self.transformed = self.normKernel.dot(self.eivect)
+        return self.transformed.dot(self.components_)
     
     
 
