@@ -92,11 +92,11 @@ class Kernels:
         else:
             d = d
         if x1.ndim == 1 and x2.ndim == 1:
-            return (np.max(0, 1 - gamma*np.linalg.norm(x1 - x2)/3)**d)*np.exp(-gamma * np.linalg.norm(x1 - x2)**2)
+            return (np.maximum(0, 1 - gamma*np.linalg.norm(x1 - x2)/3)**d)*np.exp(-gamma * np.linalg.norm(x1 - x2)**2)
         elif (x1.ndim > 1 and x2.ndim == 1) or (x1.ndim == 1 and x2.ndim > 1):
-            return (np.max(0, 1 - gamma*np.linalg.norm(x1 - x2, axis = 1)/3)**d)*np.exp(-gamma * np.linalg.norm(x1 - x2, axis = 1)**2)
+            return (np.maximum(0, 1 - gamma*np.linalg.norm(x1 - x2, axis = 1)/3)**d)*np.exp(-gamma * np.linalg.norm(x1 - x2, axis = 1)**2)
         elif x1.ndim > 1 and x2.ndim > 1:
-            return (np.max(0, 1 - gamma*np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)/3)**d) * np.exp(-gamma * np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)**2)
+            return (np.maximum(0, 1 - gamma*np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)/3)**d) * np.exp(-gamma * np.linalg.norm(x1[:, np.newaxis] - x2[np.newaxis, :], axis = 2)**2)
     
     @staticmethod
     def chi(x):
@@ -184,7 +184,7 @@ class Kernels:
         else:
             gamma = gamma
         if not op:
-            op = 'dot' #add seems like the best performning here
+            op = 'multiply' #add seems like the best performning here
         else:
             op = op
         if op == 'multiply':
@@ -217,7 +217,7 @@ class Kernels:
         else:
             d = d
         if not op:
-            op = 'dot'
+            op = 'multiply'
         else:
             op = op
         if op == 'multiply':
@@ -246,7 +246,7 @@ class Kernels:
         else:
             gamma = gamma
         if not op:
-            op = 'dot'
+            op = 'multiply'
         else:
             op = op
         if op == 'multiply':
@@ -275,7 +275,7 @@ class Kernels:
         else:
             gamma = gamma
         if not op:
-            op = 'etapoly'
+            op = 'etamul'
         else:
             op = op
         if not d:
@@ -284,6 +284,12 @@ class Kernels:
             d = d
         if op == 'eta':
             return Kernels.linrbf(x1, x2).dot(Kernels.rbfpoly(x1, x2))
+        elif op == 'etasum':
+            return Kernels.linrbf(x1, x2) + Kernels.rbfpoly(x1, x2)
+        elif op == 'etamul':
+            return Kernels.linrbf(x1, x2) * Kernels.rbfpoly(x1, x2)
+        elif op == 'etadiv':
+            return Kernels.linrbf(x1, x2) / Kernels.rbfpoly(x1, x2)
         elif op == 'etapoly':
             return Kernels.linrbf(x1, x2).dot(Kernels.rbfpoly(x1, x2)) + Kernels.rbfpoly(x1, x2).dot(Kernels.rbfcosine(x1, x2))
         elif op == 'etasig':
