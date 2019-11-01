@@ -47,7 +47,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 1
         else:
             gamma = gamma
         if x1.ndim == 1 and x2.ndim == 1:
@@ -68,7 +68,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if x1.ndim == 1 and x2.ndim == 1:
@@ -84,11 +84,11 @@ class Kernels:
         '''
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not d:
-            d = 6
+            d = 3
         else:
             d = d
         if x1.ndim == 1 and x2.ndim == 1:
@@ -117,7 +117,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not c:
@@ -136,7 +136,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not d:
-            d = 6
+            d = 3
         else:
             d = d
         return (x1.dot(x2.T))**d
@@ -164,7 +164,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         return np.exp((x1.dot(x2.T)/np.linalg.norm(x1, 1) * np.linalg.norm(x2, 1)) - 1/gamma)
@@ -180,7 +180,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not op:
@@ -209,11 +209,11 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not d:
-            d = 6
+            d = 3
         else:
             d = d
         if not op:
@@ -242,7 +242,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not op:
@@ -271,7 +271,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not op:
@@ -279,7 +279,7 @@ class Kernels:
         else:
             op = op
         if not d:
-            d = 6
+            d = 3
         else:
             d = d
         if op == 'eta':
@@ -308,7 +308,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not gamma:
-            gamma = 10
+            gamma = 0.001
         else:
             gamma = gamma
         if not op:
@@ -316,7 +316,7 @@ class Kernels:
         else:
             op = op
         if not d:
-            d = 6
+            d = 3
         else:
             d = d
         
