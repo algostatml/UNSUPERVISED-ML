@@ -93,6 +93,18 @@ class Logistic():
         '''
         return self.TP(A, P)/(self.TP(A, P) + self.FN(A, P))
     
+    def fscore(self, A, P, beta):
+        '''Docstring
+        :params: A: Actual label
+        :params: P: predicted labels
+        :params: beta: positive parameter for rebalancing evaluation task.
+        
+        Reference: http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=3CB7C5A08700CAF45274C75AABFB75B2?doi=10.1.1.95.9153&rep=rep1&type=pdf
+        '''
+        return ((np.square(beta) + 1)*self.precision(A, P)*self.recall(A, P))/\
+                (np.square(beta) * self.precision(A, P) + self.recall(A, P))
+                
+    
     def TPR(self, A, P):
         '''Docstring
         True Positive rate:
@@ -350,29 +362,29 @@ class minibatchLogistic(Logistic):
         return y_pred
     
 #%%
-import numpy as np
-from sklearn.datasets import make_blobs
-from sklearn.model_selection import train_test_split
-X, y = make_blobs(n_samples=100, centers=2, n_features=2 )
-X = np.c_[np.ones(X.shape[0]), X]
-X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.3)
-logit = Logistic().fit(X_train, Y_train, 0.1, 100)
-plt.scatter(X_train[:, 0], X_train[:, 1], c = logit.predict(X_train))
-y_pred = logit.predict(X_test)
-logit.summary(Y_test, y_pred)
-logit.confusionMatrix(Y_test, y_pred)
-plt.plot(np.arange(len(logit.cost_rec)), logit.cost_rec)
-
-stlog = stochasticLogistic(alpha=0.1, iterations=100).fit(X_train, Y_train)
-y_pred = stlog.predict(X_test)
-stlog.summary(Y_test, y_pred)
-stlog.confusionMatrix(Y_test, y_pred)
-plt.scatter(X_train[:, 0], X_train[:, 1], c = stlog.predict(X_train))
-plt.plot(np.arange(len(stlog.cost_rec)), stlog.cost_rec)
-
-minilog = minibatchLogistic(alpha=0.1, iterations=100).fit(X_test, Y_test, batchSize= 10)
-y_pred = minilog.predict(X_test)
-minilog.summary(Y_test, y_pred)
-minilog.confusionMatrix(Y_test, y_pred)
+#import numpy as np
+#from sklearn.datasets import make_blobs
+#from sklearn.model_selection import train_test_split
+#X, y = make_blobs(n_samples=100, centers=2, n_features=2 )
+#X = np.c_[np.ones(X.shape[0]), X]
+#X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.3)
+#logit = Logistic().fit(X_train, Y_train, 0.1, 100)
+#plt.scatter(X_train[:, 0], X_train[:, 1], c = logit.predict(X_train))
+#y_pred = logit.predict(X_test)
+#logit.summary(Y_test, y_pred)
+#logit.confusionMatrix(Y_test, y_pred)
+#plt.plot(np.arange(len(logit.cost_rec)), logit.cost_rec)
+#
+#stlog = stochasticLogistic(alpha=0.1, iterations=100).fit(X_train, Y_train)
+#y_pred = stlog.predict(X_test)
+#stlog.summary(Y_test, y_pred)
+#stlog.confusionMatrix(Y_test, y_pred)
+#plt.scatter(X_train[:, 0], X_train[:, 1], c = stlog.predict(X_train))
+#plt.plot(np.arange(len(stlog.cost_rec)), stlog.cost_rec)
+#
+#minilog = minibatchLogistic(alpha=0.1, iterations=100).fit(X_test, Y_test, batchSize= 10)
+#y_pred = minilog.predict(X_test)
+#minilog.summary(Y_test, y_pred)
+#minilog.confusionMatrix(Y_test, y_pred)
 
 
