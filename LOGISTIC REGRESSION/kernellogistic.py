@@ -86,7 +86,7 @@ class KLR(EvalC, loss, Kernels):
         :params: X: NxD feature space
         :params: y: Dx1 dimension
         '''
-        alpha = np.random.randn(X.shape[0])
+        alpha = np.zeros(X.shape[0])
         self.alph_s = np.outer(alpha, alpha) #alpha_i's alpha_j's
         self.y_i_s = self.y_i(y) #y_i's y_j's
         self.k = self.kernelize(X, X)
@@ -116,7 +116,7 @@ class KLR(EvalC, loss, Kernels):
         else:
             self.lr = lr
         if not iterations:
-            iterations = 5
+            iterations = 3
             self.iterations = iterations
         else:
             self.iterations = iterations
@@ -255,7 +255,7 @@ class StochKLR(EvalC, loss, Kernels):
         else:
             self.lr = lr
         if not iterations:
-            iterations = 10
+            iterations = 5
             self.iterations = iterations
         else:
             self.iterations = iterations
@@ -295,23 +295,23 @@ class StochKLR(EvalC, loss, Kernels):
     
     
 #%% Test
-import matplotlib.pyplot as plt
-from sklearn.datasets import make_blobs, make_moons, make_circles, make_classification
-from sklearn.model_selection import train_test_split
-X, y = make_moons(1000, noise = .05)
-X, y = make_blobs(n_samples=1000, centers=2, n_features=2)
-X, y = make_circles(n_samples = 1000, noise = .10, factor=.5)
-X, y = make_classification(n_samples=1000,n_features=20)
-X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.3)
-klrmodel = KLR(kernel='linear').fit(X_train, Y_train)
-klrmodel.predict(X_test)
-klrmodel.summary(Y_test, klrmodel.predict(X_test), klrmodel.alpha)
-plt.scatter(X_test[:, 0], X_test[:, 1], c = klrmodel.predict(X_test), cmap = 'coolwarm')       
-
-plt.plot(np.arange(10), klrmodel.cost_rec)
-#%%
-klrmodel_irls = StochKLR(kernel='linear').fit(X_train, Y_train)
-klrmodel_irls.predict(X_test)
-klrmodel_irls.summary(Y_test, klrmodel_irls.predict(X_test), klrmodel_irls.alpha)
-plt.scatter(X_test[:, 0], X_test[:, 1], c = klrmodel_irls.predict(X_test), cmap = 'coolwarm')       
-plt.plot(np.arange(10), klrmodel_irls.cost_rec)
+#import matplotlib.pyplot as plt
+#from sklearn.datasets import make_blobs, make_moons, make_circles, make_classification
+#from sklearn.model_selection import train_test_split
+#X, y = make_moons(1000, noise = .05)
+#X, y = make_blobs(n_samples=1000, centers=2, n_features=2)
+#X, y = make_circles(n_samples = 1000, noise = .05, factor=.5)
+#X, y = make_classification(n_samples=1000,n_features=20)
+#X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size = 0.3)
+#klrmodel = KLR(kernel='rbf').fit(X_train, Y_train)
+#klrmodel.predict(X_test)
+#klrmodel.summary(Y_test, klrmodel.predict(X_test), klrmodel.alpha)
+#plt.scatter(X_test[:, 0], X_test[:, 1], c = klrmodel.predict(X_test), cmap = 'coolwarm')       
+#
+#plt.plot(np.arange(5), klrmodel.cost_rec)
+##%%
+#klrmodel_irls = StochKLR(kernel='rbf').fit(X_train, Y_train)
+#klrmodel_irls.predict(X_test)
+#klrmodel_irls.summary(Y_test, klrmodel_irls.predict(X_test), klrmodel_irls.alpha)
+#plt.scatter(X_test[:, 0], X_test[:, 1], c = klrmodel_irls.predict(X_test), cmap = 'coolwarm')       
+#plt.plot(np.arange(10), klrmodel_irls.cost_rec)
