@@ -85,7 +85,7 @@ class kMeans:
 
 class kMeans_l1:
     def __init__(self, k = None):
-        '''
+        ''' Kmeans using the L1 distance.
         :param: k: number of clusters
         '''
         if not k:
@@ -157,27 +157,27 @@ class kMeans_l1:
     
     
 #%% Testing
-from sklearn.datasets import make_blobs, make_moons, make_circles
-X, y = make_circles(1000, noise = .07, factor = .5)
-import matplotlib.pyplot as plt
-X = np.array([[1, 2], [1, 4], [1, 0],
-              [10, 2], [10, 4], [10, 0]])
-new_x = np.array([[1, 5], [10, 6], [10, 3]])
-kmns = kMeans(k=2).fit(X)
-pred = kmns.predict(new_x)
-plt.scatter(X[:, 0], X[:, 1], c = kmns.cluster)
-plt.scatter(kmns.nu[:, 0], kmns.nu[:, 1], marker = '.')
-
-#plot cost
-plt.plot(np.arange(kmns.iter), kmns.cost_rec)
-#%% Kmeans from Sklearn
-
-from sklearn.cluster import KMeans
-kmeans = KMeans(n_clusters=2, random_state=0).fit(X)
-kmeans.labels_
-plt.scatter(X[:, 0], X[:, 1], c = kmeans.labels_)
-kmeans.predict(new)
-    
+#from sklearn.datasets import make_blobs, make_moons, make_circles
+#X, y = make_circles(1000, noise = .07, factor = .5)
+#import matplotlib.pyplot as plt
+#X = np.array([[1, 2], [1, 4], [1, 0],
+#              [10, 2], [10, 4], [10, 0]])
+#new_x = np.array([[1, 5], [10, 6], [10, 3]])
+#kmns = kMeans(k=2).fit(X)
+#pred = kmns.predict(new_x)
+#plt.scatter(X[:, 0], X[:, 1], c = kmns.cluster)
+#plt.scatter(kmns.nu[:, 0], kmns.nu[:, 1], marker = '.')
+#
+##plot cost
+#plt.plot(np.arange(kmns.iter), kmns.cost_rec)
+##%% Kmeans from Sklearn
+#
+#from sklearn.cluster import KMeans
+#kmeans = KMeans(n_clusters=2, random_state=0).fit(X)
+#kmeans.labels_
+#plt.scatter(X[:, 0], X[:, 1], c = kmeans.labels_)
+#kmeans.predict(new_x)
+#    
 
 
 
