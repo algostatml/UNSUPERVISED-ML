@@ -33,31 +33,57 @@ plt.scatter(dfiris[:, 0], dfiris[:, 1], c = yiris)
 #%%
 kernels  = ['linear', 'rbf', 'sigmoid', 'polynomial',
             'linrbf', 'rbfpoly', 'etakernel', 'laplace']
-data_name = {'moon': dfmoon, 'circle': dfcircle, 'class': dfclass, 'iris': dfiris}
+data_name = {'moon': (dfmoon, ymoon), 'circle': (dfcircle, ycircle), 'class': (dfclass, yclass), 'iris': (dfiris, yiris)}
 
-kernel_outcome = {'linear': {'time': []}, 'rbf': {'time': []}, 'sigmoid': {'time': []}, 'polynomial': {'time': []},
-                  'correlation': {'time': []}, 'linrbf': {'time': []}, 'rbfpoly': {'time': []}, 'etakernel': {'time': []}, 'laplace': {'time': []}}
-                  
+              
+kernel_outcome = {'linear': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []}, 
+                             'rbf': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []}, 
+                             'sigmoid': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []}, 
+                             'polynomial': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []},
+                             'linrbf': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []},
+                             'rbfpoly': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []},
+                             'etakernel': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []},
+                             'laplace': {'time': [], 'acc': [], 'prec': [], 'rec': [], 'f1': [], 'randind': []}}
 
 for p, q in data_name.items():
     for ii in kernels:
         start = time.time()
         if p == 'moon':
             gamma = 1
-            d = 2
-            kmeans = kkMeans(k = 2, kernel = ii, gamma = gamma).fit_predict(q)
+            d = 3
+            kmeans = kkMeans(k = 2, kernel = ii, gamma = gamma).fit_predict(q[0])
+            kernel_outcome[ii]['acc'].append(kmeans.accuracy(q[1], kmeans.clusters))
+            kernel_outcome[ii]['prec'].append(kmeans.precision(q[1], kmeans.clusters))
+            kernel_outcome[ii]['rec'].append(kmeans.recall(q[1], kmeans.clusters))
+            kernel_outcome[ii]['f1'].append(kmeans.f1(q[1], kmeans.clusters))
+            kernel_outcome[ii]['randind'].append(kmeans.rand_index_score(kmeans.clusters, q[1]))
         elif p == 'circle':
             gamma = 1
-            d = 2
-            kmeans = kkMeans(k = 2, kernel = ii, gamma = gamma).fit_predict(q)
+            d = 3
+            kmeans = kkMeans(k = 2, kernel = ii, gamma = gamma).fit_predict(q[0])
+            kernel_outcome[ii]['acc'].append(kmeans.accuracy(q[1], kmeans.clusters))
+            kernel_outcome[ii]['prec'].append(kmeans.precision(q[1], kmeans.clusters))
+            kernel_outcome[ii]['rec'].append(kmeans.recall(q[1], kmeans.clusters))
+            kernel_outcome[ii]['f1'].append(kmeans.f1(q[1], kmeans.clusters))
+            kernel_outcome[ii]['randind'].append(kmeans.rand_index_score(kmeans.clusters, q[1]))
         elif p == 'class':
             gamma = 1
-            d = 3
-            kmeans = kkMeans(k = 2, kernel = ii, gamma = gamma).fit_predict(q)
+            d = 2
+            kmeans = kkMeans(k = 2, kernel = ii, gamma = gamma).fit_predict(q[0])
+            kernel_outcome[ii]['acc'].append(kmeans.accuracy(q[1], kmeans.clusters))
+            kernel_outcome[ii]['prec'].append(kmeans.precision(q[1], kmeans.clusters))
+            kernel_outcome[ii]['rec'].append(kmeans.recall(q[1], kmeans.clusters))
+            kernel_outcome[ii]['f1'].append(kmeans.f1(q[1], kmeans.clusters))
+            kernel_outcome[ii]['randind'].append(kmeans.rand_index_score(kmeans.clusters, q[1]))
         elif p == 'iris':
             gamma = 0.1
             d = 2
-            kmeans = kkMeans(k = 3, kernel = ii, gamma = gamma).fit_predict(q)
+            kmeans = kkMeans(k = 3, kernel = ii, gamma = gamma).fit_predict(q[0])
+            kernel_outcome[ii]['acc'].append(kmeans.accuracy(q[1], kmeans.clusters))
+            kernel_outcome[ii]['prec'].append(kmeans.precision(q[1], kmeans.clusters))
+            kernel_outcome[ii]['rec'].append(kmeans.recall(q[1], kmeans.clusters))
+            kernel_outcome[ii]['f1'].append(kmeans.f1(q[1], kmeans.clusters))
+            kernel_outcome[ii]['randind'].append(kmeans.rand_index_score(kmeans.clusters, q[1]))
         end = time.time() - start
         kernel_outcome[ii][f'{p}'] = kmeans.clusters
         kernel_outcome[ii]['time'].append(end)
@@ -151,6 +177,6 @@ ax[2, 0].set_ylabel('classifciation')
 ax[3, 0].set_ylabel('Iris')
 fig.set_tight_layout(True)
 
-#%%
+#%% R
 
 
