@@ -40,7 +40,7 @@ class kMeans:
             iteration = 100
             self.iteration = iteration
         else:
-            self.iteration
+            self.iteration = iteration
         self.X = X
         #random sample
         N, D = X.shape
@@ -81,6 +81,24 @@ class kMeans:
             distance_matrix = kMeans.distance(X[ii], self.nu)
             pred[ii] = np.argmin(distance_matrix)
         return pred
+    
+    def rand_index_score(self, clusters, classes):
+        '''Compute the RandIndex
+        :param: Clusters: Cluster labels
+        :param: classses: Actual class
+        :returntype: float
+        '''
+        from scipy.special import comb
+        tp_fp = comb(np.bincount(clusters), 2).sum()
+        tp_fn = comb(np.bincount(classes), 2).sum()
+        A = np.c_[(clusters, classes)]
+        tp = sum(comb(np.bincount(A[A[:, 0] == i, 1]), 2).sum()
+                 for i in set(clusters))
+        fp = tp_fp - tp
+        fn = tp_fn - tp
+        tn = comb(len(A), 2) - tp - fp - fn
+        self.randindex = (tp + tn) / (tp + fp + fn + tn)
+        return self.randindex
     
 
 class kMeans_l1:
@@ -155,6 +173,23 @@ class kMeans_l1:
             pred[ii] = np.argmin(distance_matrix)
         return pred
     
+    def rand_index_score(self, clusters, classes):
+        '''Compute the RandIndex
+        :param: Clusters: Cluster labels
+        :param: classses: Actual class
+        :returntype: float
+        '''
+        from scipy.special import comb
+        tp_fp = comb(np.bincount(clusters), 2).sum()
+        tp_fn = comb(np.bincount(classes), 2).sum()
+        A = np.c_[(clusters, classes)]
+        tp = sum(comb(np.bincount(A[A[:, 0] == i, 1]), 2).sum()
+                 for i in set(clusters))
+        fp = tp_fp - tp
+        fn = tp_fn - tp
+        tn = comb(len(A), 2) - tp - fp - fn
+        self.randindex = (tp + tn) / (tp + fp + fn + tn)
+        return self.randindex
     
 #%% Testing
 #from sklearn.datasets import make_blobs, make_moons, make_circles
