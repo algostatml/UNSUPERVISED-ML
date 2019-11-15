@@ -36,6 +36,22 @@ class Kernels:
             c = c
         return x1.dot(x2.T) + c
     
+    
+    @staticmethod
+    def linear_svdd(x1, x2, c = None):
+        '''
+        Linear kernel
+        ----------------------------
+        :param: x1: NxD transposed feature space
+        :param: x2: NxD feature space
+        :return type: kernel(Gram) matrix
+        '''
+        if not c:
+            c = 0
+        else:
+            c = c
+        return x1.T.dot(x2) + c
+    
     @staticmethod
     def rbf(x1, x2, gamma = None):
         '''
@@ -82,13 +98,14 @@ class Kernels:
     @staticmethod
     def locguass(x1, x2, d = None, gamma = None):
         '''
+        :local guassian
         '''
         if not gamma:
             gamma = 1
         else:
             gamma = gamma
         if not d:
-            d = 3
+            d = 5
         else:
             d = d
         if x1.ndim == 1 and x2.ndim == 1:
@@ -126,7 +143,7 @@ class Kernels:
     
     
     @staticmethod
-    def polynomial(x1, x2, d = None):
+    def polynomial(x1, x2, d = None, c = None):
         '''
         polynomial kernel
         ----------------------------------------------
@@ -136,7 +153,7 @@ class Kernels:
         :return type: kernel(Gram) matrix
         '''
         if not d:
-            d = 3
+            d = 5
         else:
             d = d
         return (x1.dot(x2.T))**d
@@ -210,10 +227,9 @@ class Kernels:
         '''
         if not gamma:
             gamma = 1
-        else:
             gamma = gamma
         if not d:
-            d = 3
+            d = 5
         else:
             d = d
         if not op:
@@ -279,7 +295,7 @@ class Kernels:
         else:
             op = op
         if not d:
-            d = 3
+            d = 5
         else:
             d = d
         if op == 'eta':
@@ -316,7 +332,7 @@ class Kernels:
         else:
             op = op
         if not d:
-            d = 3
+            d = 5
         else:
             d = d
         
