@@ -105,7 +105,7 @@ class Kernels:
         else:
             gamma = gamma
         if not d:
-            d = 5
+            d = 3
         else:
             d = d
         if x1.ndim == 1 and x2.ndim == 1:
