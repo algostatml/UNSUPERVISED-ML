@@ -168,12 +168,16 @@ class EvalC:
         '''
         return (2 * (EvalC.precision(A, P) * EvalC.recall(A, P)))/(EvalC.precision(A, P) + EvalC.recall(A, P))
     
-    def summary(self, A, P, beta):
+    def summary(self, A, P, beta = None):
         '''
         :params: A: Actual label
         :params: P: predicted labels
         :return: classification summary
         '''
+        if not beta:
+            beta = 1
+        else:
+            beta = beta
         print('*'*40)
         print('\t\tSummary')
         print('*'*40)
