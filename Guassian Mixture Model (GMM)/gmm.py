@@ -62,9 +62,9 @@ class GMM(object):
         ------------
         probability of distribution (NX1 - dimension array)
         '''
-        m, n = X.shape
+        n, m = X.shape
         u = (X - mu)
-        f_t = 1/((2*np.pi)**(n/2) * det(cov)**.5) # first term 
+        f_t = 1/((2*np.pi)**(m/2) * det(cov)**.5) # first term 
         s_t = np.exp(-0.5 * u @ inv(cov) @ u.T) #second term
         return np.diagonal(f_t*s_t).reshape(-1, 1)
     
