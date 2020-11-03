@@ -23,7 +23,7 @@ class GMM(object):
     Attributes
     ------------------
     k: numbers of cluster
-    eps: convergence threshold
+    
     
     Return
     ------------------
@@ -35,7 +35,10 @@ class GMM(object):
         Parameters
         -----------
         k: cluster number
-        eps: convergence threshold or the tolerance 
+        
+        Return
+        -----------
+        None
         '''
         self.k = k
         
@@ -44,6 +47,10 @@ class GMM(object):
     @staticmethod
     def logLikelihood(X, clusters):
         '''No need to multiple by responsible in Q since they always sum to 1
+        
+        Return
+        ------
+        sum of likelihood
         '''
         log_lhd = np.log(np.array([clust['denom'] for clust in clusters])) #log likelihood for x_n
         return np.sum(log_lhd)
@@ -70,6 +77,16 @@ class GMM(object):
     
     @staticmethod
     def initialize_clusters(X, k):
+        '''
+        Parameters
+        -----------
+        X: data set
+        k: cluster number
+        
+        Return
+        -----------
+        cluster
+        '''
         n, m = X.shape
         clusters = []
         # We use the KMeans centroids to initialise the GMM
@@ -87,6 +104,16 @@ class GMM(object):
     
     def expectation(self, X, clusters):
         '''Compute the responsibility for individual clusters
+        
+        Parameters
+        -----------
+        x_n: data set
+        cluster: cluster
+        
+        Return
+        -----------
+        responsibility
+        
         '''
         n, m = X.shape
         denom = np.zeros((n, 1), dtype = np.float64)
@@ -103,6 +130,16 @@ class GMM(object):
             clust['resp'] /= clust['denom']
         
     def maximization(self, X, clusters):
+        '''
+        Parameters
+        -----------
+        x_n: data set
+        cluster: updated cluster
+        
+        Return
+        -----------
+        Updated parameters pi_k, mu_k and sigma_k
+        '''
         n, m = X.shape
         for clust in clusters:
             resp = clust['resp'] #responsibility
@@ -127,6 +164,8 @@ class GMM(object):
         Parameters
         --------------
            X: data matrix
+           epochs: numbers of iterations to perform
+           eps: convergence parameter or tolerance
            
         Attributes
         --------------
