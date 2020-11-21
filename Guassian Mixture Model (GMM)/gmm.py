@@ -12,9 +12,7 @@ from sklearn.cluster import KMeans
 from numpy.linalg import inv, det
 
 class GMM(object):
-    '''Docstring
-    Guassian Mixture Model
-    ------------------------
+    '''Guassian Mixture Model
     
     Parameters:
     ----------------
